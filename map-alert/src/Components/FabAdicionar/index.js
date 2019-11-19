@@ -11,7 +11,7 @@ export default class FabAdicionar extends React.Component {
       <Portal>
         <FAB.Group
           open={this.state.fabOpen}
-          icon={"map-marker"}
+          icon={"plus"}
           actions={[
             {
               icon: "plus",
