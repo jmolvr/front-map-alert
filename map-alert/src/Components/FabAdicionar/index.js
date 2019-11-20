@@ -14,7 +14,7 @@ export default class FabAdicionar extends React.Component {
           icon={"plus"}
           actions={[
             {
-              icon: "plus",
+              icon: "map-marker-plus",
               label: "Adicionar Alerta",
               onPress: this.props.buttonAddAlerta
             }

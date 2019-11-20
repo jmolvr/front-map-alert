@@ -4,6 +4,7 @@ import { Platform, View, Text } from "react-native";
 import MapView, { Marker, UrlTile, MAP_TYPES } from "react-native-maps";
 import { connect } from "react-redux";
 import Modal from "react-native-modal";
+import DetailsAlert from "../DetailsAlert";
 
 import { bindActionCreators } from "redux";
 import { handleAlertDetails } from "../../actions";
@@ -14,7 +15,7 @@ class Map extends React.Component {
   };
 
   render() {
-    const { alerts, region, alertDetails } = this.props;
+    const { alerts, region } = this.props;
     const { handleAlertDetails } = this.props;
 
     return (
@@ -55,7 +56,7 @@ class Map extends React.Component {
           onSwipeComplete={() => this.setState({ activeModal: false })}
         >
           <View style={styles.modal}>
-            <Text>{alertDetails}</Text>
+            <DetailsAlert />
           </View>
         </Modal>
       </View>

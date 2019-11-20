@@ -6,9 +6,9 @@ import styles from "./styles";
 
 import api from "../../services/api";
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { handleAddAlert } from '../../actions';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { handleAddAlert } from "../../actions";
 
 class AddAlerta extends React.Component {
   static navigationOptions = {
@@ -79,7 +79,8 @@ class AddAlerta extends React.Component {
     );
   }
 }
-const mapDispatchToProps = dispatch => bindActionCreators({ handleAddAlert }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ handleAddAlert }, dispatch);
 const mapStateToProps = store => ({
   alerts: store.alerts,
   region: store.region
