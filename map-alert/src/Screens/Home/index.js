@@ -9,9 +9,9 @@ import FabAdicionar from "../../Components/FabAdicionar";
 
 import api from "../../services/api";
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { handleAlertInfo, updateCurrentLocation } from '../../actions'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { handleAlertInfo, updateCurrentLocation } from "../../actions";
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -50,13 +50,11 @@ class Home extends React.Component {
 
     updateCurrentLocation({
       latitude: latitude,
-      longitude: longitude,
+      longitude: longitude
     });
   };
 
   componentDidMount() {
-    this.props.navigation.addListener("didFocus", () => this._getOpenAlerts());
-
     this._getCurrentLocation();
     this._getOpenAlerts();
   }
@@ -93,7 +91,6 @@ const mapStateToProps = store => ({
   alerts: store.alerts,
   region: store.region
 });
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({ handleAlertInfo, updateCurrentLocation }, dispatch)
-);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ handleAlertInfo, updateCurrentLocation }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

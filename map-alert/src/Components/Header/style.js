@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
+import Constants from "expo-constants";
 
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     paddingHorizontal: 25,
-    paddingTop: 7,
+    paddingTop: Constants.statusBarHeight + 15,
     paddingBottom: 10,
     backgroundColor: "#ffffff",
     justifyContent: "space-between",

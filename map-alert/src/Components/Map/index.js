@@ -5,13 +5,17 @@ import MapView, { Marker, UrlTile, MAP_TYPES } from "react-native-maps";
 import { connect } from "react-redux";
 import Modal from "react-native-modal";
 
+import { bindActionCreators } from "redux";
+import { handleAlertDetails } from "../../actions";
+
 class Map extends React.Component {
   state = {
     activeModal: false
   };
 
   render() {
-    const { alerts, region } = this.props;
+    const { alerts, region, alertDetails } = this.props;
+    const { handleAlertDetails } = this.props;
 
     return (
       <View>
@@ -29,13 +33,15 @@ class Map extends React.Component {
 
           {alerts.map(alert => (
             <Marker
-              onPress={() => this.setState({ activeModal: true })}
+              onPress={() => {
+                handleAlertDetails(alert.id);
+                this.setState({ activeModal: true });
+              }}
               key={alert.id}
               coordinate={{
                 latitude: alert.latitude,
                 longitude: alert.longitude
               }}
-              title={alert.descricao}
             />
           ))}
         </MapView>
@@ -49,7 +55,7 @@ class Map extends React.Component {
           onSwipeComplete={() => this.setState({ activeModal: false })}
         >
           <View style={styles.modal}>
-            <Text>Ola mundo</Text>
+            <Text>{alertDetails}</Text>
           </View>
         </Modal>
       </View>
@@ -59,7 +65,11 @@ class Map extends React.Component {
 
 const mapStateToProps = store => ({
   alerts: store.alerts,
-  region: store.region
+  region: store.region,
+  alertDetails: store.alertDetails
 });
 
-export default connect(mapStateToProps)(Map);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ handleAlertDetails }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);
