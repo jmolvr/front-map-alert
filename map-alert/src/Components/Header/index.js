@@ -14,7 +14,10 @@ export default class Header extends React.Component {
     return (
       <View style={styles.header}>
         <View>
-          <TouchableWithoutFeedback onPress={this.props.buttonHeaderLeft}>
+          <TouchableWithoutFeedback
+            onPress={this.props.buttonHeaderLeft}
+            hitSlop={{ top: 50, left: 50, bottom: 50, right: 50 }}
+          >
             <Ionicons name="ios-close" size={35} style={styles.closeIcon} />
           </TouchableWithoutFeedback>
         </View>

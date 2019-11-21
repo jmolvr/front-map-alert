@@ -4,6 +4,8 @@ import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import { ActivityIndicator, Text } from "react-native-paper";
 import { View } from "react-native";
+import styles from "./style";
+
 import Map from "../../Components/Map";
 import FabAdicionar from "../../Components/FabAdicionar";
 
@@ -64,11 +66,9 @@ class Home extends React.Component {
 
     if (!region || !alerts) {
       return (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
+        <View style={styles.loadingMapContainer}>
           <ActivityIndicator animating={true} size="large" />
-          <Text>{this.state.loadingStatus}</Text>
+          <Text style={styles.loadingMapText}>{this.state.loadingStatus}</Text>
         </View>
       );
     }

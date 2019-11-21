@@ -1,9 +1,10 @@
 import React from "react";
 import styles from "./style";
-import { Platform, View, Text } from "react-native";
+import { Platform, View } from "react-native";
 import MapView, { Marker, UrlTile, MAP_TYPES } from "react-native-maps";
 import { connect } from "react-redux";
 import Modal from "react-native-modal";
+
 import DetailsAlert from "../DetailsAlert";
 
 import { bindActionCreators } from "redux";
