@@ -57,7 +57,9 @@ class Map extends React.Component {
           onSwipeComplete={() => this.setState({ activeModal: false })}
         >
           <View style={styles.modal}>
-            <DetailsAlert />
+            <DetailsAlert
+              closeModal={() => this.setState({ activeModal: false })}
+            />
           </View>
         </Modal>
       </View>

@@ -16,7 +16,9 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: "#ffffff",
-    height: 300
+    maxHeight: Dimensions.get("window").height,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20
   }
 });
 
