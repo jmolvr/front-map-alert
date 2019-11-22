@@ -9,7 +9,7 @@ import styles from "./style";
 import Map from "../../Components/Map";
 import FabAdicionar from "../../Components/FabAdicionar";
 
-import api from "../../services/api";
+import { getAlerts } from "../../services/newapi";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -27,11 +27,9 @@ class Home extends React.Component {
   _getOpenAlerts = async () => {
     try {
       this.setState({ loadingStatus: "Carregando Alertas" });
-
-      const response = await api.get(`/api/alert/`);
-      const dados = response.data;
+      const data = await getAlerts();
       const { handleAlertInfo } = this.props;
-      handleAlertInfo(dados);
+      handleAlertInfo(data);
     } catch (err) {
       console.error("Erro fetching data --------", err);
     }
