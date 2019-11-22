@@ -44,6 +44,7 @@ class Map extends React.Component {
                 latitude: alert.latitude,
                 longitude: alert.longitude
               }}
+              image={require("../../../assets/pin-64.png")}
             />
           ))}
         </MapView>
