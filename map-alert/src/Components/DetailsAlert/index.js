@@ -5,10 +5,32 @@ import { Paragraph, Title, Subheading } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 
+import { getAlert } from "../../services/newapi";
+
 class DetailsAlert extends React.Component {
+  state = {
+    currentAlert: null
+  };
+
+  async getAlertOpen() {
+    try {
+      const { alertDetails } = this.props;
+      const findAlert = await getAlert(alertDetails);
+      this.setState({ currentAlert: findAlert });
+    } catch (err) {
+      console.log("Fetch error data -------", err);
+    }
+  }
+
+  componentDidMount() {
+    this.getAlertOpen();
+  }
+
   render() {
-    // id do alerta aberto
-    const { alertDetails } = this.props;
+    if (!this.state.currentAlert) {
+      return <View />;
+    }
+
     return (
       <>
         <View style={styles.header}>
@@ -33,22 +55,19 @@ class DetailsAlert extends React.Component {
             <View style={styles.aboutBox}>
               <Title style={styles.title}>Local</Title>
               <Subheading ellipsizeMode="tail" numberOfLines={1}>
-                Bloco de Ciência da computação e enegenharia eletrica
+                {this.state.currentAlert.local.nome}
               </Subheading>
             </View>
             <View style={styles.aboutBox}>
               <Title style={styles.title}>Categoria</Title>
-              <Subheading>Água</Subheading>
+              <Subheading>{this.state.currentAlert.tipo.nome}</Subheading>
             </View>
           </View>
 
           <View style={styles.description}>
             <Title style={styles.title}>Descrição</Title>
             <Paragraph style={styles.paragraph}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              blandit leo tortor, in tempor elit luctus eget. Nullam dapibus
-              lobortis condimentum. Duis pretium eu leo id egestas. Suspendisse
-              euismod vehicula nisi, quis dictum neque rutrum at. Pellentesque
+              {this.state.currentAlert.descricao}
             </Paragraph>
           </View>
         </ScrollView>
@@ -58,7 +77,8 @@ class DetailsAlert extends React.Component {
 }
 
 const mapStateToProps = store => ({
-  alertDetails: store.alertDetails
+  alertDetails: store.alertDetails,
+  alerts: store.alerts
 });
 
 export default connect(mapStateToProps)(DetailsAlert);

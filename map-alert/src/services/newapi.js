@@ -23,9 +23,18 @@ const api = axios.create({
 //   }
 // });
 
-export const getAlerts = async url => {
+export const getAlerts = async () => {
   try {
     const response = await api.get(`/api/alert/`);
+    return response.data;
+  } catch (err) {
+    console.log("Fetch erro data---------", err);
+  }
+};
+
+export const getAlert = async id => {
+  try {
+    const response = await api.get(`/api/alert/${id}/`);
     return response.data;
   } catch (err) {
     console.log("Fetch erro data---------", err);
