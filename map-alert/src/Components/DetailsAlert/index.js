@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./style";
 import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { Paragraph, Title, Subheading } from "react-native-paper";
+import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 
@@ -9,14 +10,15 @@ import { getAlert } from "../../services/newapi";
 
 class DetailsAlert extends React.Component {
   state = {
-    currentAlert: null
+    currentAlert: null,
+    loadingAlert: false
   };
 
   async getAlertOpen() {
     try {
       const { alertDetails } = this.props;
       const findAlert = await getAlert(alertDetails);
-      this.setState({ currentAlert: findAlert });
+      this.setState({ currentAlert: findAlert, loadingAlert: true });
     } catch (err) {
       console.log("Fetch error data -------", err);
     }
@@ -28,7 +30,44 @@ class DetailsAlert extends React.Component {
 
   render() {
     if (!this.state.currentAlert) {
-      return <View />;
+      return (
+        <>
+          <View style={styles.header}>
+            <View>
+              <TouchableWithoutFeedback
+                onPress={this.props.closeModal}
+                hitSlop={{ top: 50, left: 50, bottom: 50, right: 50 }}
+              >
+                <Ionicons name="ios-close" size={35} />
+              </TouchableWithoutFeedback>
+            </View>
+            <View>
+              <Title style={styles.title}>Detalhes</Title>
+            </View>
+            <View />
+          </View>
+          <ShimmerPlaceHolder
+            autoRun={true}
+            visible={this.state.loadingAlert}
+            style={styles.imageShimmer}
+          />
+          <ShimmerPlaceHolder
+            autoRun={true}
+            visible={this.state.loadingAlert}
+            style={styles.aboutShimmer}
+          />
+          <ShimmerPlaceHolder
+            autoRun={true}
+            visible={this.state.loadingAlert}
+            style={styles.descriptionTitleShimmer}
+          />
+          <ShimmerPlaceHolder
+            autoRun={true}
+            visible={this.state.loadingAlert}
+            style={styles.descriptionTextShimmer}
+          />
+        </>
+      );
     }
 
     return (
