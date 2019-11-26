@@ -14,7 +14,7 @@ class DetailsAlert extends React.Component {
     loadingAlert: false
   };
 
-  async getAlertOpen() {
+  async _getAlertOpen() {
     try {
       const { alertDetails } = this.props;
       const findAlert = await getAlert(alertDetails);
@@ -25,7 +25,7 @@ class DetailsAlert extends React.Component {
   }
 
   componentDidMount() {
-    this.getAlertOpen();
+    this._getAlertOpen();
   }
 
   render() {

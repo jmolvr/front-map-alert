@@ -1,8 +1,14 @@
 import React from "react";
-import { TextInput } from "react-native";
-import { Snackbar } from "react-native-paper";
+import {
+  TextInput,
+  KeyboardAvoidingView,
+  View,
+  TouchableOpacity
+} from "react-native";
+import { Snackbar, Subheading } from "react-native-paper";
 import Header from "../../Components/Header";
 import styles from "./styles";
+import { Ionicons } from "@expo/vector-icons";
 
 import api from "../../services/api";
 
@@ -57,17 +63,28 @@ class AddAlerta extends React.Component {
           buttonHeaderRight={this._pressButtonAddAlert}
         />
 
-        <TextInput
-          placeholder="Descreva o problema"
-          editable
-          multiline
-          numberOfLines={10}
-          onChangeText={text => this.setState({ descricaoText: text })}
-          value={this.state.descricaoText}
-          style={styles.inputText}
-          autoFocus={true}
-        />
-
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.container}
+          anabled
+        >
+          <TouchableOpacity onPress={() => console.log("nckdn")}>
+            <View style={styles.addImage}>
+              <Ionicons name="ios-camera" size={38} style={styles.closeIcon} />
+              <Subheading style={styles.text}>Adicionar imagem</Subheading>
+            </View>
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Descreva o problema"
+            editable
+            multiline
+            numberOfLines={10}
+            onChangeText={text => this.setState({ descricaoText: text })}
+            value={this.state.descricaoText}
+            style={styles.inputText}
+            autoFocus={true}
+          />
+        </KeyboardAvoidingView>
         <Snackbar
           visible={this.state.errorAlert}
           onDismiss={() => this.setState({ errorAlert: false })}
