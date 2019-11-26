@@ -3,8 +3,10 @@ import {
   TextInput,
   KeyboardAvoidingView,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  CameraRoll
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { Snackbar, Subheading } from "react-native-paper";
 import Header from "../../Components/Header";
 import styles from "./styles";
@@ -24,7 +26,20 @@ class AddAlerta extends React.Component {
   state = {
     descricaoText: "",
     errorMessage: "",
+    image: null,
     errorAlert: false
+  };
+
+  _takePhoto = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      allowEditing: false,
+      exif: true
+    });
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+    // CameraRoll.saveToCameraRoll(this.state.image);
   };
 
   _pressButtonAddAlert = async () => {
@@ -68,12 +83,19 @@ class AddAlerta extends React.Component {
           style={styles.container}
           anabled
         >
-          <TouchableOpacity onPress={() => console.log("nckdn")}>
+          <TouchableOpacity onPress={() => this._takePhoto()}>
             <View style={styles.addImage}>
-              <Ionicons name="ios-camera" size={38} style={styles.closeIcon} />
-              <Subheading style={styles.text}>Adicionar imagem</Subheading>
+              <Ionicons
+                name={this.state.image ? "ios-checkmark" : "ios-camera"}
+                size={38}
+                style={styles.closeIcon}
+              />
+              <Subheading style={styles.text}>
+                {this.state.image ? "Imagem Adicionada" : "Adicionar Imagem"}
+              </Subheading>
             </View>
           </TouchableOpacity>
+
           <TextInput
             placeholder="Descreva o problema"
             editable
