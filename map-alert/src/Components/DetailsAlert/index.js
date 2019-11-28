@@ -19,8 +19,9 @@ class DetailsAlert extends React.Component {
 
   async _getAlertOpen() {
     try {
-      const { alertDetails } = this.props;
-      const findAlert = await getAlert(alertDetails);
+      const { alertDetails, alerts } = this.props;
+      let findAlert = null;
+      findAlert = alerts.find(alert => alert.id === alertDetails);
       const { updateCurrentLocation } = this.props;
       updateCurrentLocation({
         latitude: findAlert.latitude,
