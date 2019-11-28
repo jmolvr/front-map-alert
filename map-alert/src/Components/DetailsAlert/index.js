@@ -4,7 +4,10 @@ import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { Paragraph, Title, Subheading } from "react-native-paper";
 import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
+
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { updateCurrentLocation } from "../../actions";
 
 import { getAlert } from "../../services/newapi";
 
@@ -18,6 +21,11 @@ class DetailsAlert extends React.Component {
     try {
       const { alertDetails } = this.props;
       const findAlert = await getAlert(alertDetails);
+      const { updateCurrentLocation } = this.props;
+      updateCurrentLocation({
+        latitude: findAlert.latitude,
+        longitude: findAlert.longitude
+      });
       this.setState({ currentAlert: findAlert, loadingAlert: true });
     } catch (err) {
       console.log("Fetch error data -------", err);
@@ -119,5 +127,6 @@ const mapStateToProps = store => ({
   alertDetails: store.alertDetails,
   alerts: store.alerts
 });
-
-export default connect(mapStateToProps)(DetailsAlert);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ updateCurrentLocation }, dispatch);
+export default connect(mapStateToProps, mapDispatchToProps)(DetailsAlert);
