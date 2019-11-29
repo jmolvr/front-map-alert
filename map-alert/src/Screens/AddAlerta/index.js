@@ -37,7 +37,13 @@ class AddAlerta extends React.Component {
     });
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.setState({
+        image: {
+          uri: result.uri,
+          type: "image/jpeg",
+          name: "testando" + Date.now() + '.jpg'
+        }
+      });
     }
     // CameraRoll.saveToCameraRoll(this.state.image);
   };
@@ -46,20 +52,20 @@ class AddAlerta extends React.Component {
     if (this.state.descricaoText.length !== 0) {
       try {
         const { latitude, longitude } = this.props.region;
+        //adicionando form Data
+        data = new FormData();
+        data.append('image', this.state.image);
+        data.append('tipo', "Água");
+        data.append('descricao', this.state.descricaoText);
+        data.append('local', "DCET");
+        data.append('longitude', longitude);
+        data.append('latitude', latitude);
 
-        const response = await api.post(`/api/alert/`, {
-          local: "DCET",
-          tipo: "Água",
-          descricao: this.state.descricaoText,
-          longitude: longitude,
-          latitude: latitude,
-          status: 0
-        });
+        const response = await api.post(`/api/alert/`, data);
         const { handleAddAlert } = this.props;
-        handleAddAlert(response.data);
         this.props.navigation.navigate("Home");
       } catch (err) {
-        console.error("Erro ao adicionar alerta------", err);
+        console.error("Erro aos postar alerta - - - ", err);
       }
     } else {
       this.setState({

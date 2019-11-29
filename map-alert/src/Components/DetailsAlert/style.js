@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     color: "#333333"
   },
   image: {
-    backgroundColor: "#cccccc",
     height: 230
   },
   imageShimmer: {
