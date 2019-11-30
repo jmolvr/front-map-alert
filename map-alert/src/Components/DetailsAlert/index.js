@@ -28,7 +28,6 @@ class DetailsAlert extends React.Component {
         longitude: findAlert.longitude
       });
       this.setState({ currentAlert: findAlert, loadingAlert: true });
-      console.log(this.state.currentAlert);
     } catch (err) {
       console.log("Fetch error data -------", err);
     }
