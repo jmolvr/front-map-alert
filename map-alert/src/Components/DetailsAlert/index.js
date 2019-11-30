@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./style";
-import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
+import { View, TouchableWithoutFeedback, ScrollView, Image } from "react-native";
 import { Paragraph, Title, Subheading } from "react-native-paper";
 import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
@@ -97,7 +97,9 @@ class DetailsAlert extends React.Component {
         </View>
 
         <ScrollView>
-          <View style={styles.image}></View>
+          <View style={styles.image}>
+            <Image style={styles.image} source={{ uri: this.state.currentAlert.image }} />
+          </View>
 
           <View style={styles.about}>
             <View style={styles.aboutBox}>

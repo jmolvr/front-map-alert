@@ -24,6 +24,24 @@ class Home extends React.Component {
     loadingStatus: ""
   };
 
+  _websocket = () => {
+
+    let ws = new WebSocket("ws://192.168.1.102:8000/ws/alertas/");
+    ws.onopen = event => {
+      console.log("WebSocket conectado");
+    }
+
+    ws.onmessage = event => {
+      let data = JSON.parse(event.data);
+      console.log("Dados do ws - - -", data);
+      const { handleAlertInfo } = this.props;
+      handleAlertInfo(data.payload);
+    }
+
+    ws.onclose = event => {
+      console.log("WS fechado");
+    }
+  }
   _getOpenAlerts = async () => {
     try {
       this.setState({ loadingStatus: "Carregando Alertas" });
@@ -31,7 +49,7 @@ class Home extends React.Component {
       const { handleAlertInfo } = this.props;
       handleAlertInfo(data);
     } catch (err) {
-      console.error("Erro fetching data --------", err);
+      console.error("Erro na inicialização", err);
     }
   };
 
@@ -57,6 +75,7 @@ class Home extends React.Component {
   componentDidMount() {
     this._getCurrentLocation();
     this._getOpenAlerts();
+    this._websocket();
   }
 
   render() {
