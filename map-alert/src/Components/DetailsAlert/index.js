@@ -1,33 +1,37 @@
 import React from "react";
 import styles from "./style";
-import { View, TouchableWithoutFeedback, ScrollView, Image } from "react-native";
+import {
+  View,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Image
+} from "react-native";
 import { Paragraph, Title, Subheading } from "react-native-paper";
-import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateCurrentLocation } from "../../actions";
 
-import { getAlert } from "../../services/newapi";
-
 class DetailsAlert extends React.Component {
   state = {
-    currentAlert: null,
-    loadingAlert: false
+    currentAlert: null
   };
 
   async _getAlertOpen() {
     try {
       const { alertDetails, alerts } = this.props;
+
       let findAlert = null;
       findAlert = alerts.find(alert => alert.id === alertDetails);
+
       const { updateCurrentLocation } = this.props;
       updateCurrentLocation({
         latitude: findAlert.latitude,
         longitude: findAlert.longitude
       });
-      this.setState({ currentAlert: findAlert, loadingAlert: true });
+
+      this.setState({ currentAlert: findAlert });
     } catch (err) {
       console.log("Fetch error data -------", err);
     }
@@ -39,44 +43,7 @@ class DetailsAlert extends React.Component {
 
   render() {
     if (!this.state.currentAlert) {
-      return (
-        <>
-          <View style={styles.header}>
-            <View>
-              <TouchableWithoutFeedback
-                onPress={this.props.closeModal}
-                hitSlop={{ top: 50, left: 50, bottom: 50, right: 50 }}
-              >
-                <Ionicons name="ios-close" size={35} />
-              </TouchableWithoutFeedback>
-            </View>
-            <View>
-              <Title style={styles.title}>Detalhes</Title>
-            </View>
-            <View />
-          </View>
-          <ShimmerPlaceHolder
-            autoRun={true}
-            visible={this.state.loadingAlert}
-            style={styles.imageShimmer}
-          />
-          <ShimmerPlaceHolder
-            autoRun={true}
-            visible={this.state.loadingAlert}
-            style={styles.aboutShimmer}
-          />
-          <ShimmerPlaceHolder
-            autoRun={true}
-            visible={this.state.loadingAlert}
-            style={styles.descriptionTitleShimmer}
-          />
-          <ShimmerPlaceHolder
-            autoRun={true}
-            visible={this.state.loadingAlert}
-            style={styles.descriptionTextShimmer}
-          />
-        </>
-      );
+      return <View />;
     }
 
     return (
@@ -98,7 +65,10 @@ class DetailsAlert extends React.Component {
 
         <ScrollView>
           <View style={styles.image}>
-            <Image style={styles.image} source={{ uri: this.state.currentAlert.image }} />
+            <Image
+              style={styles.image}
+              source={{ uri: this.state.currentAlert.image }}
+            />
           </View>
 
           <View style={styles.about}>
