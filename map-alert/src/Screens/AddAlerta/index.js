@@ -3,14 +3,14 @@ import {
   TextInput,
   KeyboardAvoidingView,
   View,
-  TouchableOpacity,
-  CameraRoll
+  TouchableOpacity
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Snackbar, Subheading } from "react-native-paper";
 import Header from "../../Components/Header";
 import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
+import * as ImageManipulator from "expo-image-manipulator";
 
 import api from "../../services/api";
 
@@ -36,16 +36,21 @@ class AddAlerta extends React.Component {
       exif: true
     });
 
+    const resizePhoto = await ImageManipulator.manipulateAsync(
+      result.uri,
+      [{ resize: { width: 300 } }],
+      { compress: 0.4, format: ImageManipulator.SaveFormat.JPEG }
+    );
+
     if (!result.cancelled) {
       this.setState({
         image: {
-          uri: result.uri,
+          uri: resizePhoto.uri,
           type: "image/jpeg",
-          name: "testando" + Date.now() + '.jpg'
+          name: "testando" + Date.now() + ".jpg"
         }
       });
     }
-    // CameraRoll.saveToCameraRoll(this.state.image);
   };
 
   _pressButtonAddAlert = async () => {
@@ -54,15 +59,16 @@ class AddAlerta extends React.Component {
         const { latitude, longitude } = this.props.region;
         //adicionando form Data
         data = new FormData();
-        data.append('image', this.state.image);
-        data.append('tipo', "Água");
-        data.append('descricao', this.state.descricaoText);
-        data.append('local', "DCET");
-        data.append('longitude', longitude);
-        data.append('latitude', latitude);
+        data.append("image", this.state.image);
+        data.append("tipo", "Água");
+        data.append("descricao", this.state.descricaoText);
+        data.append("local", "DCET");
+        data.append("longitude", longitude);
+        data.append("latitude", latitude);
 
         const response = await api.post(`/api/alert/`, data);
         const { handleAddAlert } = this.props;
+        handleAddAlert(response.data);
         this.props.navigation.navigate("Home");
       } catch (err) {
         console.error("Erro aos postar alerta - - - ", err);

@@ -25,27 +25,29 @@ class Home extends React.Component {
   };
 
   _websocket = () => {
-
     let ws = new WebSocket("ws://192.168.1.102:8000/ws/alertas/");
     ws.onopen = event => {
       console.log("WebSocket conectado");
-    }
+    };
 
     ws.onmessage = event => {
       let data = JSON.parse(event.data);
       console.log("Dados do ws - - -", data);
       const { handleAlertInfo } = this.props;
       handleAlertInfo(data.payload);
-    }
+    };
 
     ws.onclose = event => {
       console.log("WS fechado");
-    }
-  }
+    };
+  };
+
   _getOpenAlerts = async () => {
     try {
       this.setState({ loadingStatus: "Carregando Alertas" });
+
       const data = await getAlerts();
+
       const { handleAlertInfo } = this.props;
       handleAlertInfo(data);
     } catch (err) {
