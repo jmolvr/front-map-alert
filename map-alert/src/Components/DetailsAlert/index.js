@@ -72,16 +72,10 @@ class DetailsAlert extends React.Component {
           </View>
 
           <View style={styles.about}>
-            <View style={styles.aboutBox}>
-              <Title style={styles.title}>Local</Title>
-              <Subheading ellipsizeMode="tail" numberOfLines={1}>
-                {this.state.currentAlert.local.nome}
-              </Subheading>
-            </View>
-            <View style={styles.aboutBox}>
-              <Title style={styles.title}>Categoria</Title>
-              <Subheading>{this.state.currentAlert.tipo.nome}</Subheading>
-            </View>
+            <Title style={styles.title}>Local</Title>
+            <Subheading ellipsizeMode="tail" numberOfLines={1}>
+              {this.state.currentAlert.local.nome}
+            </Subheading>
           </View>
 
           <View style={styles.description}>

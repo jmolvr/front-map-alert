@@ -23,37 +23,11 @@ const styles = StyleSheet.create({
   },
   about: {
     marginHorizontal: 20,
-    paddingVertical: 20,
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  aboutShimmer: {
-    height: 100,
-    width: Dimensions.get("window").width * 0.75,
-    marginVertical: 20,
-    borderRadius: 5,
-    alignSelf: "center"
-  },
-  aboutBox: {
-    width: 110
+    paddingVertical: 20
   },
   description: {
     paddingHorizontal: 20,
     paddingBottom: 20
-  },
-  descriptionTitleShimmer: {
-    width: 110,
-    height: 16,
-    marginBottom: 10,
-    borderRadius: 5,
-    marginLeft: 20
-  },
-  descriptionTextShimmer: {
-    width: Dimensions.get("window").width * 0.9,
-    marginBottom: 20,
-    height: 60,
-    alignSelf: "center",
-    borderRadius: 5
   },
   paragraph: {
     fontSize: 16,
