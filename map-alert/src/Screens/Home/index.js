@@ -21,27 +21,38 @@ class Home extends React.Component {
   };
 
   state = {
-    loadingStatus: ""
+    loadingStatus: "",
+    ws: null
   };
+  timeout = 250;
 
   _websocket = () => {
-    let ws = new WebSocket("ws://192.168.1.102:8000/ws/alertas/");
+    var ws = new WebSocket("ws://mapalertunifapapi.herokuapp.com//ws/alertas/unsolved/");
+    let that = this;
+    var connectInterval;
     ws.onopen = event => {
-      console.log("WebSocket conectado");
+      console.log("Web Socket conectado!");
+      this.setState({ ws: ws });
+      that.timeout = 250;
+      clearTimeout(connectInterval);
     };
 
     ws.onmessage = event => {
       let data = JSON.parse(event.data);
-      console.log("Dados do ws - - -", data);
       const { handleAlertInfo } = this.props;
       handleAlertInfo(data.payload);
     };
 
     ws.onclose = event => {
+      that.timeout = that.timeout + that.timeout;
+      connectInterval = setTimeout(this.check, Math.min(100000, that.timeout));
       console.log("WS fechado");
     };
   };
-
+  check = () => {
+    const { ws } = this.state;
+    if (!ws || ws.readyState == WebSocket.CLOSED) this._websocket();
+  }
   _getOpenAlerts = async () => {
     try {
       this.setState({ loadingStatus: "Carregando Alertas" });
@@ -78,6 +89,10 @@ class Home extends React.Component {
     this._getCurrentLocation();
     this._getOpenAlerts();
     this._websocket();
+  }
+
+  componentWillUnmount() {
+    this.state.ws.close();
   }
 
   render() {
