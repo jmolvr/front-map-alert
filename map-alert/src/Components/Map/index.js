@@ -33,13 +33,13 @@ class Map extends React.Component {
         >
           <UrlTile urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-          {alerts.map(alert => (
+          {alerts.map((alert, index) => (
             <Marker
               onPress={() => {
                 handleAlertDetails(alert.id);
                 this.setState({ activeModal: true });
               }}
-              key={alert.id}
+              key={index}
               coordinate={{
                 latitude: alert.latitude,
                 longitude: alert.longitude

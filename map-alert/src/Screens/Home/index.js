@@ -21,26 +21,40 @@ class Home extends React.Component {
   };
 
   state = {
-    loadingStatus: ""
+    loadingStatus: "",
+    ws: null
   };
 
+  timeout = 250;
+  connectInterval;
   _websocket = () => {
-    let ws = new WebSocket("ws://192.168.1.102:8000/ws/alertas/");
+    var ws = new WebSocket("ws://mapalertunifapapi.herokuapp.com/ws/alertas/unsolved/");
+    let that = this;
+
     ws.onopen = event => {
-      console.log("WebSocket conectado");
+      this.setState({ ws: ws });
+      that.timeout = 250;
+      clearTimeout(this.connectInterval);
     };
 
     ws.onmessage = event => {
       let data = JSON.parse(event.data);
-      console.log("Dados do ws - - -", data);
       const { handleAlertInfo } = this.props;
-      handleAlertInfo(data.payload);
+      //handleAlertInfo(data.payload);
+      this._getOpenAlerts();
     };
 
     ws.onclose = event => {
-      console.log("WS fechado");
+      that.timeout = that.timeout + that.timeout;
+      this.connectInterval = setTimeout(this.check, Math.min(5000, that.timeout));
     };
   };
+
+  check = () => {
+    const { ws } = this.state;
+    let isFocused = this.props.navigation.isFocused();
+    if (!ws || ws.readyState == WebSocket.CLOSED || isFocused) this._websocket();
+  }
 
   _getOpenAlerts = async () => {
     try {
@@ -77,8 +91,28 @@ class Home extends React.Component {
   componentDidMount() {
     this._getCurrentLocation();
     this._getOpenAlerts();
+    this.subs = [
+      this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
+      this.props.navigation.addListener('willBlur', (payload) => this.componentWillBlur(payload))
+    ]
+  }
+
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
+    clearTimeout(this.connectInterval);
+  }
+
+  componentWillBlur() {
+    this.state.ws.close();
+    clearTimeout(this.connectInterval);
+  }
+
+  componentDidFocus() {
+    this._getCurrentLocation();
+    this._getOpenAlerts();
     this._websocket();
   }
+
 
   render() {
     const { alerts, region } = this.props;
