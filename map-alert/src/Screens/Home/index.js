@@ -27,7 +27,7 @@ class Home extends React.Component {
   timeout = 250;
 
   _websocket = () => {
-    var ws = new WebSocket("ws://mapalertunifapapi.herokuapp.com//ws/alertas/unsolved/");
+    var ws = new WebSocket("ws://mapalertunifapapi.herokuapp.com/ws/alertas/unsolved/");
     let that = this;
     var connectInterval;
     ws.onopen = event => {
@@ -45,7 +45,7 @@ class Home extends React.Component {
 
     ws.onclose = event => {
       that.timeout = that.timeout + that.timeout;
-      connectInterval = setTimeout(this.check, Math.min(100000, that.timeout));
+      connectInterval = setTimeout(this.check, Math.min(5000, that.timeout));
       console.log("WS fechado");
     };
   };
@@ -53,6 +53,7 @@ class Home extends React.Component {
     const { ws } = this.state;
     if (!ws || ws.readyState == WebSocket.CLOSED) this._websocket();
   }
+
   _getOpenAlerts = async () => {
     try {
       this.setState({ loadingStatus: "Carregando Alertas" });
