@@ -24,17 +24,17 @@ class Home extends React.Component {
     loadingStatus: "",
     ws: null
   };
-  timeout = 250;
 
+  timeout = 250;
+  connectInterval;
   _websocket = () => {
     var ws = new WebSocket("ws://mapalertunifapapi.herokuapp.com/ws/alertas/unsolved/");
     let that = this;
-    var connectInterval;
+
     ws.onopen = event => {
-      console.log("Web Socket conectado!");
       this.setState({ ws: ws });
       that.timeout = 250;
-      clearTimeout(connectInterval);
+      clearTimeout(this.connectInterval);
     };
 
     ws.onmessage = event => {
@@ -45,13 +45,14 @@ class Home extends React.Component {
 
     ws.onclose = event => {
       that.timeout = that.timeout + that.timeout;
-      connectInterval = setTimeout(this.check, Math.min(5000, that.timeout));
-      console.log("WS fechado");
+      this.connectInterval = setTimeout(this.check, Math.min(5000, that.timeout));
     };
   };
+
   check = () => {
     const { ws } = this.state;
-    if (!ws || ws.readyState == WebSocket.CLOSED) this._websocket();
+    let isFocused = this.props.navigation.isFocused();
+    if (!ws || ws.readyState == WebSocket.CLOSED || isFocused) this._websocket();
   }
 
   _getOpenAlerts = async () => {
@@ -89,12 +90,28 @@ class Home extends React.Component {
   componentDidMount() {
     this._getCurrentLocation();
     this._getOpenAlerts();
-    this._websocket();
+    this.subs = [
+      this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
+      this.props.navigation.addListener('willBlur', (payload) => this.componentWillBlur(payload))
+    ]
   }
 
   componentWillUnmount() {
-    this.state.ws.close();
+    this.subs.forEach(sub => sub.remove());
+    clearTimeout(this.connectInterval);
   }
+
+  componentWillBlur() {
+    this.state.ws.close();
+    clearTimeout(this.connectInterval);
+  }
+
+  componentDidFocus() {
+    this._getCurrentLocation();
+    this._getOpenAlerts();
+    this._websocket();
+  }
+
 
   render() {
     const { alerts, region } = this.props;
