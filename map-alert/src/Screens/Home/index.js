@@ -40,7 +40,8 @@ class Home extends React.Component {
     ws.onmessage = event => {
       let data = JSON.parse(event.data);
       const { handleAlertInfo } = this.props;
-      handleAlertInfo(data.payload);
+      //handleAlertInfo(data.payload);
+      this._getOpenAlerts();
     };
 
     ws.onclose = event => {
