@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image
 } from "react-native";
+import { format } from "date-fns";
 import { Paragraph, Title, Subheading } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -46,6 +47,11 @@ class DetailsAlert extends React.Component {
       return <View />;
     }
 
+    let dateFormated = format(
+      new Date(this.state.currentAlert.prazo),
+      "dd-MM-yyy"
+    );
+
     return (
       <>
         <View style={styles.header}>
@@ -83,6 +89,25 @@ class DetailsAlert extends React.Component {
             <Paragraph style={styles.paragraph}>
               {this.state.currentAlert.descricao}
             </Paragraph>
+          </View>
+
+          <View style={styles.feedback}>
+            <Title style={styles.titleFeedback}>Feedback</Title>
+            {this.state.currentAlert.feedback ? (
+              <>
+                <Subheading style={styles.subTitleFeedback}>
+                  Prefeitura da instituição
+                </Subheading>
+                <Paragraph style={styles.paragraph}>
+                  {this.state.currentAlert.feedback}
+                </Paragraph>
+                <Title style={styles.title}>Prazo: {dateFormated}</Title>
+              </>
+            ) : (
+              <Paragraph style={styles.paragraph}>
+                Nenhuma resposta ainda. Tenha paciência.
+              </Paragraph>
+            )}
           </View>
         </ScrollView>
       </>
