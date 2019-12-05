@@ -10,7 +10,7 @@ Algumas convenções de desenvolvimento que devem ser seguidas ao desenvolver a 
 
 1. NodeJs 12.13.0 LTS
 2. NPM 6.12.0
-3. A última versão do Expo
+3. Expo-cli 3.4.1
 
 ## Formatação de código
 

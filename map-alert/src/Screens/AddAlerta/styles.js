@@ -1,5 +1,16 @@
 import { StyleSheet, Dimensions } from "react-native";
 
+const defaultAddImage = {
+  width: Dimensions.get("window").width - 40,
+  marginTop: 10,
+  marginHorizontal: 20,
+  paddingVertical: 7,
+  justifyContent: "center",
+  borderRadius: 5,
+  borderWidth: 1,
+  flexDirection: "row"
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,22 +23,21 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     fontSize: 18
   },
-  addImage: {
+  defaultAddImage: {
     width: Dimensions.get("window").width - 40,
     marginTop: 10,
     marginHorizontal: 20,
     paddingVertical: 7,
+    justifyContent: "center",
     borderRadius: 5,
-    borderColor: "#cccccc",
     borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "center"
+    flexDirection: "row"
   },
-  closeIcon: {
+  defaultImageIcon: {
     marginRight: 10,
     color: "#cccccc"
   },
-  text: {
+  defaultImageText: {
     color: "#cccccc",
     marginTop: 10
   }

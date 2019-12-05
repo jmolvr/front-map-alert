@@ -8,8 +8,10 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Snackbar, Subheading } from "react-native-paper";
 import Header from "../../Components/Header";
+import LoadingModal from "../../Components/LoadingModal";
 import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
+import Modal from "react-native-modal";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import api from "../../services/api";
@@ -27,7 +29,9 @@ class AddAlerta extends React.Component {
     descricaoText: "",
     errorMessage: "",
     image: null,
-    errorAlert: false
+    addImageMessage: "empty",
+    errorAlert: false,
+    activeModal: false
   };
 
   _takePhoto = async () => {
@@ -36,19 +40,19 @@ class AddAlerta extends React.Component {
       exif: true
     });
 
-    const resizePhoto = await ImageManipulator.manipulateAsync(
-      result.uri,
-      [{ resize: { width: 300 } }],
-      { compress: 0.4, format: ImageManipulator.SaveFormat.JPEG }
-    );
-
     if (!result.cancelled) {
+      const resizePhoto = await ImageManipulator.manipulateAsync(
+        result.uri,
+        [{ resize: { width: 300 } }],
+        { compress: 0.4, format: ImageManipulator.SaveFormat.JPEG }
+      );
       this.setState({
         image: {
           uri: resizePhoto.uri,
           type: "image/jpeg",
           name: "testando" + Date.now() + ".jpg"
-        }
+        },
+        addImageMessage: "added"
       });
     }
   };
@@ -56,8 +60,9 @@ class AddAlerta extends React.Component {
   _pressButtonAddAlert = async () => {
     if (this.state.descricaoText.length !== 0) {
       try {
+        this.setState({ activeModal: true });
         const { latitude, longitude } = this.props.region;
-        //adicionando form Data
+
         data = new FormData();
         data.append("image", this.state.image);
         data.append("tipo", "Água");
@@ -69,6 +74,7 @@ class AddAlerta extends React.Component {
         const response = await api.post(`/api/alert/`, data);
         const { handleAddAlert } = this.props;
         handleAddAlert(response.data);
+
         this.props.navigation.navigate("Home");
       } catch (err) {
         console.error("Erro aos postar alerta - - - ", err);
@@ -80,6 +86,17 @@ class AddAlerta extends React.Component {
       });
     }
   };
+
+  addStyleImage() {
+    switch (this.state.addImageMessage) {
+      case "empty":
+        return { borderColor: "#cccccc", color: "#cccccc" };
+      case "added":
+        return { borderColor: "#6200EE", color: "#6200EE" };
+      default:
+        return { borderColor: "#cccccc", color: "#cccccc" };
+    }
+  }
 
   render() {
     return (
@@ -96,13 +113,15 @@ class AddAlerta extends React.Component {
           anabled
         >
           <TouchableOpacity onPress={() => this._takePhoto()}>
-            <View style={styles.addImage}>
+            <View style={[styles.defaultAddImage, this.addStyleImage()]}>
               <Ionicons
                 name={this.state.image ? "ios-checkmark" : "ios-camera"}
                 size={38}
-                style={styles.closeIcon}
+                style={[styles.defaultImageIcon, this.addStyleImage()]}
               />
-              <Subheading style={styles.text}>
+              <Subheading
+                style={[styles.defaultImageText, this.addStyleImage()]}
+              >
                 {this.state.image ? "Imagem Adicionada" : "Adicionar Imagem"}
               </Subheading>
             </View>
@@ -119,6 +138,18 @@ class AddAlerta extends React.Component {
             autoFocus={true}
           />
         </KeyboardAvoidingView>
+
+        <Modal
+          isVisible={this.state.activeModal}
+          useNativeDriver
+          style={{ margin: 0 }}
+          onBackButtonPress={() => this.setState({ activeModal: false })}
+          onBackdropPress={() => this.setState({ activeModal: false })}
+          onSwipeComplete={() => this.setState({ activeModal: false })}
+        >
+          <LoadingModal text="Adicionando Alerta" />
+        </Modal>
+
         <Snackbar
           visible={this.state.errorAlert}
           onDismiss={() => this.setState({ errorAlert: false })}

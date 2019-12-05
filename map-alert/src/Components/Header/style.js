@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     paddingHorizontal: 25,
-    paddingTop: Constants.statusBarHeight + 15,
+    paddingTop: Constants.statusBarHeight + 20,
     paddingBottom: 10,
     backgroundColor: "#ffffff",
     justifyContent: "space-between",
@@ -20,13 +20,13 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     backgroundColor: "#6200EE",
-    paddingHorizontal: 15,
+    paddingHorizontal: 17,
     paddingVertical: 5,
-    borderRadius: 4
+    borderRadius: 200
   },
   headerButtonText: {
     color: "#ffffff",
-    fontSize: 17
+    fontSize: 16
   }
 });
 
