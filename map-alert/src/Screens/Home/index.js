@@ -1,11 +1,10 @@
 import React from "react";
-
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
-import { ActivityIndicator, Text } from "react-native-paper";
 import { View } from "react-native";
 import styles from "./style";
 
+import LoadingModal from "../../Components/LoadingModal";
 import Map from "../../Components/Map";
 import FabAdicionar from "../../Components/FabAdicionar";
 
@@ -21,14 +20,15 @@ class Home extends React.Component {
   };
 
   state = {
-    loadingStatus: "",
     ws: null
   };
 
   timeout = 250;
   connectInterval;
   _websocket = () => {
-    var ws = new WebSocket("ws://mapalertunifapapi.herokuapp.com/ws/alertas/unsolved/");
+    var ws = new WebSocket(
+      "ws://mapalertunifapapi.herokuapp.com/ws/alertas/unsolved/"
+    );
     let that = this;
 
     ws.onopen = event => {
@@ -40,26 +40,27 @@ class Home extends React.Component {
     ws.onmessage = event => {
       let data = JSON.parse(event.data);
       const { handleAlertInfo } = this.props;
-      //handleAlertInfo(data.payload);
       this._getOpenAlerts();
     };
 
     ws.onclose = event => {
       that.timeout = that.timeout + that.timeout;
-      this.connectInterval = setTimeout(this.check, Math.min(5000, that.timeout));
+      this.connectInterval = setTimeout(
+        this.check,
+        Math.min(5000, that.timeout)
+      );
     };
   };
 
   check = () => {
     const { ws } = this.state;
     let isFocused = this.props.navigation.isFocused();
-    if (!ws || ws.readyState == WebSocket.CLOSED || isFocused) this._websocket();
-  }
+    if (!ws || ws.readyState == WebSocket.CLOSED || isFocused)
+      this._websocket();
+  };
 
   _getOpenAlerts = async () => {
     try {
-      this.setState({ loadingStatus: "Carregando Alertas" });
-
       const data = await getAlerts();
 
       const { handleAlertInfo } = this.props;
@@ -70,8 +71,6 @@ class Home extends React.Component {
   };
 
   _getCurrentLocation = async () => {
-    this.setState({ loadingStatus: "Carregando sua localização" });
-
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
       return console.log("Permissão negada!");
@@ -92,9 +91,13 @@ class Home extends React.Component {
     this._getCurrentLocation();
     this._getOpenAlerts();
     this.subs = [
-      this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
-      this.props.navigation.addListener('willBlur', (payload) => this.componentWillBlur(payload))
-    ]
+      this.props.navigation.addListener("didFocus", payload =>
+        this.componentDidFocus(payload)
+      ),
+      this.props.navigation.addListener("willBlur", payload =>
+        this.componentWillBlur(payload)
+      )
+    ];
   }
 
   componentWillUnmount() {
@@ -113,22 +116,21 @@ class Home extends React.Component {
     this._websocket();
   }
 
-
   render() {
     const { alerts, region } = this.props;
 
-    if (!region || !alerts) {
-      return (
+    const loadMap =
+      !region || !alerts ? (
         <View style={styles.loadingMapContainer}>
-          <ActivityIndicator animating={true} size="large" />
-          <Text style={styles.loadingMapText}>{this.state.loadingStatus}</Text>
+          <LoadingModal text="Carregando alertas" />
         </View>
+      ) : (
+        <Map />
       );
-    }
 
     return (
       <>
-        <Map />
+        {loadMap}
         <FabAdicionar
           buttonAddAlerta={() => {
             this._getCurrentLocation();

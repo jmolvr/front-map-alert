@@ -32,6 +32,19 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 16,
     textAlign: "justify"
+  },
+  feedback: {
+    padding: 20,
+    borderTopWidth: 1,
+    borderColor: "#eeeeee"
+  },
+  titleFeedback: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#333333"
+  },
+  subTitleFeedback: {
+    fontWeight: "bold"
   }
 });
 
