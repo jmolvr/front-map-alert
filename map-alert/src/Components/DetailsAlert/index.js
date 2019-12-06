@@ -49,7 +49,7 @@ class DetailsAlert extends React.Component {
 
     let dateFormated = format(
       new Date(this.state.currentAlert.prazo),
-      "dd-MM-yyy"
+      "dd-MM-yyyy"
     );
 
     return (
@@ -101,13 +101,14 @@ class DetailsAlert extends React.Component {
                 <Paragraph style={styles.paragraph}>
                   {this.state.currentAlert.feedback}
                 </Paragraph>
-                <Title style={styles.title}>Prazo: {dateFormated}</Title>
+                {this.state.currentAlert.prazo && <Title style={styles.title}>Prazo: {dateFormated}</Title>}
+
               </>
             ) : (
-              <Paragraph style={styles.paragraph}>
-                Nenhuma resposta ainda. Tenha paciência.
+                <Paragraph style={styles.paragraph}>
+                  Nenhuma resposta ainda. Tenha paciência.
               </Paragraph>
-            )}
+              )}
           </View>
         </ScrollView>
       </>

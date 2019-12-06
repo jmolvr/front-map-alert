@@ -11,10 +11,13 @@ import { bindActionCreators } from "redux";
 import { handleAlertDetails } from "../../actions";
 
 class Map extends React.Component {
+  constructor() {
+    super();
+    this.mapRef = null;
+  }
   state = {
     activeModal: false
   };
-
   render() {
     const { alerts, region } = this.props;
     const { handleAlertDetails } = this.props;
@@ -25,13 +28,19 @@ class Map extends React.Component {
           style={styles.mapStyle}
           region={region}
           provider={null}
+          minZoomLevel={16}
+          ref={(ref) => this.mapRef = ref}
+          onLayout={() => this.mapRef.setMapBoundaries(
+            { latitude: 0.0016, longitude: -51.0823 },
+            { latitude: -0.00998, longitude: -51.08885 }
+          )}
           mapType={
             Platform.OS == "android" ? MAP_TYPES.NONE : MAP_TYPES.STANDARD
           }
           rotateEnabled={false}
           showsUserLocation
         >
-          <UrlTile urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <UrlTile urlTemplate="https://c.osm.rrze.fau.de/osmhd/{z}/{x}/{y}.png" />
 
           {alerts.map((alert, index) => (
             <Marker
@@ -44,11 +53,12 @@ class Map extends React.Component {
                 latitude: alert.latitude,
                 longitude: alert.longitude
               }}
-              image={require("../../../assets/pin-64.png")}
+              pinColor='#6200ee'
+              flat={true}
             />
           ))}
         </MapView>
-
+        {}
         <Modal
           isVisible={this.state.activeModal}
           useNativeDriver
