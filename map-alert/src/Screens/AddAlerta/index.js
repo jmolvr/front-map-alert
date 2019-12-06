@@ -27,6 +27,7 @@ class AddAlerta extends React.Component {
 
   state = {
     descricaoText: "",
+    localText: "",
     errorMessage: "",
     image: null,
     addImageMessage: "empty",
@@ -50,7 +51,7 @@ class AddAlerta extends React.Component {
         image: {
           uri: resizePhoto.uri,
           type: "image/jpeg",
-          name: "testando" + Date.now() + ".jpg"
+          name: "img" + Date.now() + ".jpg"
         },
         addImageMessage: "added"
       });
@@ -58,7 +59,8 @@ class AddAlerta extends React.Component {
   };
 
   _pressButtonAddAlert = async () => {
-    if (this.state.descricaoText.length !== 0) {
+    const { descricaoText, localText } = this.state;
+    if (descricaoText.length !== 0 || localText.length !== 0) {
       try {
         this.setState({ activeModal: true });
         const { latitude, longitude } = this.props.region;
@@ -67,7 +69,7 @@ class AddAlerta extends React.Component {
         data.append("image", this.state.image);
         data.append("tipo", "Água");
         data.append("descricao", this.state.descricaoText);
-        data.append("local", "DCET");
+        data.append("local", this.state.localText);
         data.append("longitude", longitude);
         data.append("latitude", latitude);
 
@@ -81,7 +83,7 @@ class AddAlerta extends React.Component {
       }
     } else {
       this.setState({
-        errorMessage: "Você precisa descrever o problema",
+        errorMessage: "Você precisa inserir os dados",
         errorAlert: true
       });
     }
@@ -128,14 +130,21 @@ class AddAlerta extends React.Component {
           </TouchableOpacity>
 
           <TextInput
+            placeholder="Local (Ex: Bloco K, DEPLA, DCET)"
+            onChangeText={text => this.setState({ localText: text })}
+            value={this.state.localText}
+            autoFocus={true}
+            style={styles.inputText}
+          />
+
+          <TextInput
             placeholder="Descreva o problema"
             editable
             multiline
             numberOfLines={10}
             onChangeText={text => this.setState({ descricaoText: text })}
             value={this.state.descricaoText}
-            style={styles.inputText}
-            autoFocus={true}
+            style={styles.descriptionText}
           />
         </KeyboardAvoidingView>
 

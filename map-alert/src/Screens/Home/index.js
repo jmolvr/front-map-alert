@@ -1,7 +1,6 @@
 import React from "react";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
-import { ActivityIndicator, Text } from "react-native-paper";
 import { View } from "react-native";
 import styles from "./style";
 

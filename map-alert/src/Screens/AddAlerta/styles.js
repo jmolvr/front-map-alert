@@ -18,14 +18,24 @@ const styles = StyleSheet.create({
   },
   inputText: {
     paddingLeft: 30,
+    paddingVertical: 13,
+    fontSize: 18,
+    borderTopWidth: 1,
+    borderColor: "#eeeeee"
+  },
+  descriptionText: {
+    paddingLeft: 30,
     paddingVertical: 20,
     height: 300,
     textAlignVertical: "top",
-    fontSize: 18
+    fontSize: 18,
+    borderTopWidth: 1,
+    borderColor: "#eeeeee"
   },
   defaultAddImage: {
     width: Dimensions.get("window").width - 40,
     marginTop: 10,
+    marginBottom: 18,
     marginHorizontal: 20,
     paddingVertical: 7,
     justifyContent: "center",
