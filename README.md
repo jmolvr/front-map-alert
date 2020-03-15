@@ -19,3 +19,9 @@ Para a formatação de código vamos usar o plugin _Prettier_ no _VS Code_, com 
 1.  Vá em **Extensions > procure por Prettier > Install**.
 2.  **Settings > procure por Editor: Default Formatter > escolha a esbenp.prettier-vscode**.
 3.  Ainda em Settings, procure por **Editor: Format On Save** e marque esta opção.
+
+## Executando
+
+1. npm install
+2. expo start
+3. Leia o QRCode com o app do Expo no Android
