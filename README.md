@@ -25,3 +25,9 @@ Para a formatação de código vamos usar o plugin _Prettier_ no _VS Code_, com 
 1. npm install
 2. expo start
 3. Leia o QRCode com o app do Expo no Android
+
+## Autores
+
+| ![Marcos Oliveira](https://avatars2.githubusercontent.com/u/32722681?v=3&s=150) | ![João Marcos](https://avatars2.githubusercontent.com/u/38922264?v=3&s=150)|
+|:---------------------:|:---------------------:|
+|  [Marcos Oliveira](https://github.com/marcosolvr/) |  [João Marcos](https://github.com/jmolvr/)
